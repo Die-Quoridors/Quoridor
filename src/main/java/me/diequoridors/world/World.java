@@ -11,4 +11,8 @@ public class World {
 
     }
 
+    public void placeWalls(int x, int y,  WallRotation rotation) {
+        walls.add(new Wall(x, y, rotation));
+    }
+    
 }
