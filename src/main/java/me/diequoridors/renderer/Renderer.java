@@ -8,12 +8,12 @@ import java.util.TimerTask;
 
 public class Renderer {
 
-    private World world;
+    private final World world;
 
-    private Frame frame = new Frame();
-    private Canvas canvas = new Canvas();
+    private final Frame frame = new Frame();
+    private final Canvas canvas = new Canvas();
 
-    private Timer frameTimer = new Timer();
+    private final Timer frameTimer = new Timer();
 
     public Renderer(World world) {
         this.world = world;
