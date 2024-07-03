@@ -12,7 +12,7 @@ public class Renderer {
 
     private final World world;
 
-    private final Frame frame = new Frame();
+    public final Frame frame = new Frame();
     private final Canvas canvas = new Canvas();
 
     private final Timer frameTimer = new Timer();
