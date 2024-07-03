@@ -1,7 +1,7 @@
 package me.diequoridors;
 
-import me.diequoridors.renderer.Renderer;
-import me.diequoridors.renderer.WindowInteractions;
+import me.diequoridors.ui.Renderer;
+import me.diequoridors.ui.WindowInteractions;
 import me.diequoridors.world.World;
 
 

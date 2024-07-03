@@ -1,4 +1,4 @@
-package me.diequoridors.renderer;
+package me.diequoridors.ui;
 
 import me.diequoridors.Game;
 
