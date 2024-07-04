@@ -21,8 +21,44 @@ public class Player {
     }
 
     public void move(int x, int y) {
+        int travelDistance = Math.abs(this.x - x) + Math.abs(this.y - y);
+        if (travelDistance > 1 || travelDistance == 0) {
+            return;
+        }
+        WallRotation movementDirection = (this.x - x) == 0 ? WallRotation.Vertical : WallRotation.Horizontal;
+        for (Wall wall : world.walls) {
+            if (this.y - y > 0) { // Up
+                if (wall.x == this.x - 1 && wall.y == this.y - 1 && wall.rotation == WallRotation.Horizontal) {
+                    return;
+                }
+                if (wall.x == this.x && wall.y == this.y - 1 && wall.rotation == WallRotation.Horizontal) {
+                    return;
+                }
+            } else if (this.y - y < 0) { // Down
+                if (wall.x == this.x - 1 && wall.y == this.y && wall.rotation == WallRotation.Horizontal) {
+                    return;
+                }
+                if (wall.x == this.x && wall.y == this.y && wall.rotation == WallRotation.Horizontal) {
+                    return;
+                }
+            } else if (this.x - x > 0) { // Left
+                if (wall.x == this.x - 1 && wall.y == this.y - 1 && wall.rotation == WallRotation.Vertical) {
+                    return;
+                }
+                if (wall.x == this.x - 1 && wall.y == this.y && wall.rotation == WallRotation.Vertical) {
+                    return;
+                }
+            } else if (this.x - x < 0) { // Right
+                if (wall.x == this.x && wall.y == this.y - 1 && wall.rotation == WallRotation.Vertical) {
+                    return;
+                }
+                if (wall.x == this.x && wall.y == this.y && wall.rotation == WallRotation.Vertical) {
+                    return;
+                }
+            }
+        }
         this.x = x;
         this.y = y;
     }
-
+    
 }
