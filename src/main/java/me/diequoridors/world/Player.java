@@ -11,11 +11,13 @@ public class Player {
     public int y;
 
     public final Color color;
+    private final World world;
 
-    public Player(int x, int y, Color color) {
+    public Player(int x, int y, Color color, World world) {
         this.x = x;
         this.y = y;
         this.color = color;
+        this.world = world;
     }
 
     public void move(int x, int y) {
