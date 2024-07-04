@@ -15,7 +15,7 @@ public class Renderer {
     private final World world;
 
     public final Frame frame = new Frame();
-    private final Canvas canvas = new Canvas();
+    public final Canvas canvas = new Canvas();
 
     private final Timer frameTimer = new Timer();
 
@@ -49,6 +49,22 @@ public class Renderer {
     public void exit() {
         frameTimer.cancel();
         frame.dispose();
+    }
+
+    private int getCellSize() {
+        int windowSize = Math.min(frame.getWidth(), frame.getHeight() - frame.getInsets().top);
+        return windowSize / gridSize;
+    }
+
+    public int coordinatesToScreen(int coord) {
+        int cellSize = getCellSize();
+        return coord * cellSize;
+    }
+
+    public int screenToCoordinates(int screen) {
+        int cellSize = getCellSize();
+        int coord = screen / cellSize;
+        return Math.min(gridSize, Math.max(0, coord));
     }
 
     private void renderFrame() {
