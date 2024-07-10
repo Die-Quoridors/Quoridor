@@ -1,6 +1,8 @@
 package me.diequoridors.ui;
 
 import me.diequoridors.world.Player;
+import me.diequoridors.world.Wall;
+import me.diequoridors.world.WallRotation;
 import me.diequoridors.world.World;
 
 import java.awt.*;
@@ -11,6 +13,7 @@ public class Renderer {
 
     private static final int gridSize = 9;
     private static final float cellPadding = 0.1f;
+    private static final int wallWidth = 10;
 
     private final World world;
 
@@ -95,6 +98,18 @@ public class Renderer {
             graphics.fillOval(x, y, usabelCellSize, usabelCellSize);
             graphics.setColor(Color.BLACK);
             graphics.drawOval(x, y, usabelCellSize, usabelCellSize);
+        }
+
+        // === render Walls ===
+        for (Wall wall : world.walls) {
+            int x = wall.x * cellSize + (wall.rotation == WallRotation.Horizontal ? 0 : cellSize - (wallWidth / 2));
+            int y = wall.y * cellSize + (wall.rotation == WallRotation.Horizontal ? (cellSize - (wallWidth / 2)) : 0);
+
+            int width = wall.rotation == WallRotation.Vertical ? wallWidth : (cellSize * 2);
+            int height = wall.rotation == WallRotation.Horizontal ? wallWidth : (cellSize * 2);
+
+            graphics.setColor(Color.BLACK);
+            graphics.fillRect(x, y, width, height);
         }
 
         canvas.getBufferStrategy().show();
