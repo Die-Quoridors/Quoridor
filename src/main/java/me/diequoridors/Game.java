@@ -3,6 +3,7 @@ package me.diequoridors;
 import me.diequoridors.ui.MouseListener;
 import me.diequoridors.ui.Renderer;
 import me.diequoridors.ui.WindowInteractions;
+import me.diequoridors.world.Player;
 import me.diequoridors.world.World;
 
 
