@@ -62,6 +62,6 @@ public class Player {
     }
     
     public void placeWalls(int x, int y,  WallRotation rotation) {
-        walls.add(new Wall(x, y, rotation, this));
+        world.walls.add(new Wall(x, y, rotation, this));
     }
 }
