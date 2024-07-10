@@ -7,9 +7,10 @@ public class World {
 
     public ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
+    public int wallLimit;
 
-    public World() {
-
+    public World(int wallLimit) {
+        this.wallLimit = wallLimit;
     }
 
     public void populatePlayers(int playerCount) throws Error {

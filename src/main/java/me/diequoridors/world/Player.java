@@ -61,7 +61,12 @@ public class Player {
         this.y = y;
     }
     
-    public void placeWalls(int x, int y,  WallRotation rotation) {
+    public boolean placeWall(int x, int y,  WallRotation rotation) {
+        long placedWalls = world.walls.stream().filter(wall -> wall.placer == this).count();
+        if (placedWalls >= world.wallLimit) {
+            return false;
+        }
         world.walls.add(new Wall(x, y, rotation, this));
+        return true;
     }
 }

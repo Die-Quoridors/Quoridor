@@ -12,8 +12,8 @@ public class Game {
     private final WindowInteractions windowInteractions;
     private final MouseListener mouseListener;
 
-    public Game(int playerCount) {
-        World world = new World();
+    public Game(int playerCount, int wallLimit) {
+        World world = new World(wallLimit);
         renderer = new Renderer(world);
         windowInteractions = new WindowInteractions(renderer, this);
         mouseListener = new MouseListener(renderer, world);
