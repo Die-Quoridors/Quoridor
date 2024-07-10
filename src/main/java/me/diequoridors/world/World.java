@@ -23,9 +23,5 @@ public class World {
             players.add(new Player(startPos[0], startPos[1], color, this));
         }
     }
-
-    public void placeWalls(int x, int y,  WallRotation rotation) {
-        walls.add(new Wall(x, y, rotation));
-    }
     
 }
