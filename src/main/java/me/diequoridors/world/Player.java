@@ -25,7 +25,7 @@ public class Player {
         if (travelDistance > 1 || travelDistance == 0) {
             return;
         }
-        WallRotation movementDirection = (this.x - x) == 0 ? WallRotation.Vertical : WallRotation.Horizontal;
+
         for (Wall wall : world.walls) {
             if (this.y - y > 0) { // Up
                 if (wall.x == this.x - 1 && wall.y == this.y - 1 && wall.rotation == WallRotation.Horizontal) {
