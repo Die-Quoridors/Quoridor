@@ -118,6 +118,34 @@ public class Renderer {
             graphics.fillRect(x, y, width, height);
         }
 
+        // === render non placed Walls
+        for (int i = 0; i < world.players.size(); i++) {
+            Player player = world.players.get(i);
+            long wallCount = world.walls.stream().filter(wall -> wall.placer == player).count();
+            int[] startPosition = Player.playerStartPosMap[i];
+            int[] wallDepotStart = Player.playerWallDepotArea[i];
+            WallRotation playerRotation = Player.playerTargetDirection[i];
+
+            for (int w = 0; w < (world.wallLimit - wallCount); w++) {
+
+                int wOffset = w * cellSize;
+                int xOff = playerRotation == WallRotation.Vertical ? wOffset : 0;
+                int yOff = playerRotation == WallRotation.Vertical ? 0 : wOffset;
+
+                int x = wallDepotStart[0] * cellSize + xOff + cellSize;
+                int y = wallDepotStart[1] * cellSize + yOff + cellSize;
+
+                int width = playerRotation == WallRotation.Vertical ? wallWidth : cellSize;
+                int height = playerRotation == WallRotation.Horizontal ? wallWidth : cellSize;
+
+                int xMv = playerRotation == WallRotation.Horizontal ? 0 : wallWidth / 2;
+                int yMv = playerRotation == WallRotation.Vertical ? 0 : wallWidth / 2;
+
+                graphics.setColor(Color.GRAY);
+                graphics.fillRect(x + xMv - width, y + yMv - height, width, height);
+            }
+        }
+
         canvas.getBufferStrategy().show();
         graphics.dispose();
     }
