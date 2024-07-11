@@ -1,5 +1,7 @@
 package me.diequoridors.world;
 
+import me.diequoridors.ui.Renderer;
+
 import java.awt.*;
 
 public class Player {
@@ -24,6 +26,9 @@ public class Player {
     public void move(int x, int y) {
         int travelDistance = Math.abs(this.x - x) + Math.abs(this.y - y);
         if (travelDistance > 1 || travelDistance == 0) {
+            return;
+        }
+        if (x < 0 || y < 0 || x >= Renderer.gridSize || y >= Renderer.gridSize) {
             return;
         }
 

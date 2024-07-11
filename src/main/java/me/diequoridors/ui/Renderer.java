@@ -11,7 +11,7 @@ import java.util.TimerTask;
 
 public class Renderer {
 
-    private static final int gridSize = 9;
+    public static final int gridSize = 9;
     private static final float cellPadding = 0.1f;
     private static final int wallWidth = 10;
 
@@ -30,7 +30,7 @@ public class Renderer {
         frame.setResizable(false);
         frame.setFocusable(true);
         frame.setTitle("Quoridor");
-        frame.setSize(new Dimension(720, 720 + frame.getInsets().top));
+        frame.setSize(new Dimension(880, 880 + frame.getInsets().top));
 
         canvas.setVisible(true);
         canvas.setFocusable(false);
@@ -56,17 +56,17 @@ public class Renderer {
 
     private int getCellSize() {
         int windowSize = Math.min(frame.getWidth(), frame.getHeight() - frame.getInsets().top);
-        return windowSize / gridSize;
+        return windowSize / (gridSize + 2);
     }
 
     public int coordinatesToScreen(int coord) {
         int cellSize = getCellSize();
-        return coord * cellSize;
+        return coord * cellSize + getCellSize();
     }
 
     public int screenToCoordinates(int screen) {
         int cellSize = getCellSize();
-        int coord = screen / cellSize;
+        int coord = (screen - getCellSize()) / cellSize;
         return Math.min(gridSize, Math.max(0, coord));
     }
 
@@ -75,7 +75,8 @@ public class Renderer {
         graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         int windowSize = Math.min(frame.getWidth(), frame.getHeight() - frame.getInsets().top);
-        int cellSize = windowSize / gridSize;
+        int cellSize = getCellSize();
+        int offsetGame = cellSize;
         int usabelCellSize = (int) (cellSize * (1 - 2 * cellPadding));
         int cellOffset = (int) (cellSize * cellPadding);
 
@@ -85,14 +86,14 @@ public class Renderer {
         // === render Grid ===
         for (int i = 1; i < gridSize; i++) {
             graphics.setColor(Color.LIGHT_GRAY);
-            graphics.drawLine(i * cellSize, 0, i * cellSize, frame.getHeight());
-            graphics.drawLine(0, i * cellSize, frame.getWidth(), i * cellSize);
+            graphics.drawLine(i * cellSize + offsetGame, 0, i * cellSize + offsetGame, frame.getHeight());
+            graphics.drawLine(0, i * cellSize + offsetGame, frame.getWidth(), i * cellSize + offsetGame);
         }
 
         // === render Players ===
         for (Player player : world.players) {
-            int x = player.x * cellSize + cellOffset;
-            int y = player.y * cellSize + cellOffset;
+            int x = player.x * cellSize + cellOffset + offsetGame;
+            int y = player.y * cellSize + cellOffset + offsetGame;
 
             graphics.setColor(player.color);
             graphics.fillOval(x, y, usabelCellSize, usabelCellSize);
@@ -102,8 +103,8 @@ public class Renderer {
 
         // === render Walls ===
         for (Wall wall : world.walls) {
-            int x = wall.x * cellSize + (wall.rotation == WallRotation.Horizontal ? 0 : cellSize - (wallWidth / 2));
-            int y = wall.y * cellSize + (wall.rotation == WallRotation.Horizontal ? (cellSize - (wallWidth / 2)) : 0);
+            int x = wall.x * cellSize + (wall.rotation == WallRotation.Horizontal ? 0 : cellSize - (wallWidth / 2)) + offsetGame;
+            int y = wall.y * cellSize + (wall.rotation == WallRotation.Horizontal ? (cellSize - (wallWidth / 2)) : 0) + offsetGame;
 
             int width = wall.rotation == WallRotation.Vertical ? wallWidth : (cellSize * 2);
             int height = wall.rotation == WallRotation.Horizontal ? wallWidth : (cellSize * 2);
