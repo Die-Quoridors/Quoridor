@@ -64,10 +64,35 @@ public class Renderer {
         return coord * cellSize + getCellSize();
     }
 
-    public int screenToCoordinates(int screen) {
+    public int screenToCoordinates(int screen, boolean wall) {
         int cellSize = getCellSize();
-        int coord = (screen - getCellSize()) / cellSize;
+        int offset = wall ? cellSize / 2 : 0;
+        int coord = (screen - cellSize - offset) / cellSize;
         return Math.min(gridSize, Math.max(0, coord));
+    }
+
+    public Player screenToWallPlayer(int screenX, int screenY) {
+        int cellSize = getCellSize();
+        int x = screenX / cellSize;
+        int y = screenY / cellSize;
+
+        System.out.print(x);
+        System.out.print("/");
+        System.out.println(y);
+
+        for (int i = 0; i < world.players.size(); i++) {
+            int[] wallStart = Player.playerWallDepotArea[i];
+            WallRotation targetDirection = Player.playerTargetDirection[i];
+
+            if (
+                    (targetDirection == WallRotation.Vertical && y == wallStart[1])
+                    || (targetDirection == WallRotation.Horizontal && x == wallStart[0])
+            ) {
+                return world.players.get(i);
+            }
+        }
+
+        return null;
     }
 
     private void renderFrame() {
@@ -121,14 +146,15 @@ public class Renderer {
         // === render non placed Walls
         for (int i = 0; i < world.players.size(); i++) {
             Player player = world.players.get(i);
-            long wallCount = world.walls.stream().filter(wall -> wall.placer == player).count();
-            int[] startPosition = Player.playerStartPosMap[i];
+            long placedWallCount = world.walls.stream().filter(wall -> wall.placer == player).count();
+            long placableWallsCount = world.wallLimit - placedWallCount;
             int[] wallDepotStart = Player.playerWallDepotArea[i];
             WallRotation playerRotation = Player.playerTargetDirection[i];
+            int wallSpacing = placableWallsCount <= (gridSize + 1) ? cellSize : cellSize / (int) (Math.ceil(((double) (placableWallsCount - 1) / gridSize)));
 
-            for (int w = 0; w < (world.wallLimit - wallCount); w++) {
+            for (int w = 0; w < placableWallsCount; w++) {
 
-                int wOffset = w * cellSize;
+                int wOffset = w * wallSpacing;
                 int xOff = playerRotation == WallRotation.Vertical ? wOffset : 0;
                 int yOff = playerRotation == WallRotation.Vertical ? 0 : wOffset;
 
