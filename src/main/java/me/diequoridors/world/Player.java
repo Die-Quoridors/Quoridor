@@ -92,17 +92,16 @@ public class Player {
         }
     }
     
-    public boolean placeWall(int x, int y,  WallRotation rotation) {
+    public void placeWall(int x, int y, WallRotation rotation) {
         long placedWalls = game.world.walls.stream().filter(wall -> wall.placer == this).count();
         if (placedWalls >= game.world.wallLimit) {
-            return false;
+            return;
         }
         Wall wall = new Wall(x, y, rotation, this);
         game.world.walls.add(wall);
         if (!isClone && game.networkAdapter != null) {
             game.networkAdapter.sendWallPlace(wall);
         }
-        return true;
     }
 
     public static int playerToIndex(Player player) {

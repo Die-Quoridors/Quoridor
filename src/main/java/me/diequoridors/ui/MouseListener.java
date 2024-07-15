@@ -4,7 +4,6 @@ import me.diequoridors.Game;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
-import me.diequoridors.world.World;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -63,7 +62,7 @@ public class MouseListener extends MouseAdapter {
         if (movingPlayer != null) {
             int x = game.renderer.screenToCoordinates(e.getX(), false);
             int y = game.renderer.screenToCoordinates(e.getY(), false);
-            phantomPlayer.x = movingPlayer.x;;
+            phantomPlayer.x = movingPlayer.x;
             phantomPlayer.y = movingPlayer.y;
             phantomPlayer.move(x, y);
         } else if (wallPlayer != null) {

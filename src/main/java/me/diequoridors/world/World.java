@@ -10,7 +10,7 @@ public class World {
     public ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
     public int wallLimit;
-    private Game game;
+    private final Game game;
     public Player ownPlayer;
 
     public World(int wallLimit, Game game) {

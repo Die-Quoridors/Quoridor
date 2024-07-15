@@ -38,7 +38,7 @@ public abstract class Socket extends WebSocketClient {
 
     @Override
     public void onError(Exception e) {
-        System.out.println(e);
+        e.printStackTrace();
     }
 
     public void emit(String event, JSONObject data) {
