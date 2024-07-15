@@ -158,6 +158,20 @@ public class Renderer {
             graphics.fillRect(x, y, width, height);
         }
 
+        // === render phantom Wall
+
+        Wall phantomWall = game.mouseListener.phantomWall;
+        if (phantomWall != null) {
+            int x = phantomWall.x * cellSize + (phantomWall.rotation == WallRotation.Horizontal ? 0 : cellSize - (wallWidth / 2)) + cellSize;
+            int y = phantomWall.y * cellSize + (phantomWall.rotation == WallRotation.Horizontal ? (cellSize - (wallWidth / 2)) : 0) + cellSize;
+
+            int width = phantomWall.rotation == WallRotation.Vertical ? wallWidth : (cellSize * 2);
+            int height = phantomWall.rotation == WallRotation.Horizontal ? wallWidth : (cellSize * 2);
+
+            graphics.setColor(Color.BLACK);
+            graphics.fillRect(x, y, width, height);
+        }
+
         // === render non placed Walls
         for (int i = 0; i < world.players.size(); i++) {
             Player player = world.players.get(i);

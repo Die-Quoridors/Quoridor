@@ -2,6 +2,7 @@ package me.diequoridors.ui;
 
 import me.diequoridors.Game;
 import me.diequoridors.world.Player;
+import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
 import me.diequoridors.world.World;
 
@@ -18,6 +19,7 @@ public class MouseListener extends MouseAdapter {
     private Player wallPlayer;
 
     public Player phantomPlayer;
+    public Wall phantomWall;
 
     public MouseListener(Game game) {
         this.renderer = game.renderer;
@@ -45,6 +47,11 @@ public class MouseListener extends MouseAdapter {
         });
 
         wallPlayer = renderer.screenToWallPlayer(e.getX(), e.getY());
+        if (wallPlayer != null) {
+            int x = renderer.screenToCoordinates(e.getX(), true);
+            int y = renderer.screenToCoordinates(e.getY(), true);
+            phantomWall = new Wall(x, y, WallRotation.Vertical, wallPlayer);
+        }
     }
 
     @Override
@@ -55,6 +62,13 @@ public class MouseListener extends MouseAdapter {
             phantomPlayer.x = movingPlayer.x;;
             phantomPlayer.y = movingPlayer.y;
             phantomPlayer.move(x, y);
+        } else if (wallPlayer != null) {
+            int x = renderer.screenToCoordinates(e.getX(), true);
+            int y = renderer.screenToCoordinates(e.getY(), true);
+            if (x >= 0 && y >= 0 && x < (Renderer.gridSize - 1) && y < (Renderer.gridSize - 1)) {
+                phantomWall.x = x;
+                phantomWall.y = y;
+            }
         }
     }
 
@@ -67,9 +81,12 @@ public class MouseListener extends MouseAdapter {
             movingPlayer = null;
             phantomPlayer = null;
         } else if (wallPlayer != null) {
-            int x = renderer.screenToCoordinates(e.getX(), true);
-            int y = renderer.screenToCoordinates(e.getY(), true);
-            wallPlayer.placeWall(x, y, WallRotation.Vertical);
+            int mouseX = renderer.screenToCoordinates(e.getX(), true);
+            int mouseY = renderer.screenToCoordinates(e.getY(), true);
+            int x = Math.min(Renderer.gridSize - 2, mouseX);
+            int y = Math.min(Renderer.gridSize - 2, mouseY);
+            wallPlayer.placeWall(x, y, phantomWall.rotation);
+            phantomWall = null;
         }
     }
 }
