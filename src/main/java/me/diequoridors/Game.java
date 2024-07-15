@@ -1,5 +1,6 @@
 package me.diequoridors;
 
+import me.diequoridors.network.GameNetworkAdapter;
 import me.diequoridors.ui.KeyListener;
 import me.diequoridors.ui.MouseListener;
 import me.diequoridors.ui.Renderer;
@@ -7,23 +8,34 @@ import me.diequoridors.ui.WindowInteractions;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.World;
 
+import java.net.URI;
+
 
 public class Game {
+
+    public boolean playerStrictMode = false;
 
     public final Renderer renderer;
     private final WindowInteractions windowInteractions;
     public final MouseListener mouseListener;
     private final KeyListener keyListener;
     public final World world;
+    public GameNetworkAdapter networkAdapter;
     
     public Game(int playerCount, int wallLimit) {
-        world = new World(wallLimit);
+        world = new World(wallLimit, this);
         renderer = new Renderer(this);
         windowInteractions = new WindowInteractions(this);
         mouseListener = new MouseListener(this);
         keyListener = new KeyListener(this);
 
         world.populatePlayers(playerCount);
+    }
+
+    public Game(int playerCount, int wallLimit, URI serverUrl, String gameId) {
+        this(playerCount, wallLimit);
+
+        networkAdapter = new GameNetworkAdapter(serverUrl, this, gameId);
     }
 
     public void exit() {

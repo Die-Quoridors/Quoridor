@@ -1,5 +1,7 @@
 package me.diequoridors.world;
 
+import me.diequoridors.Game;
+
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -8,9 +10,12 @@ public class World {
     public ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
     public int wallLimit;
+    private Game game;
+    public Player ownPlayer;
 
-    public World(int wallLimit) {
+    public World(int wallLimit, Game game) {
         this.wallLimit = wallLimit;
+        this.game = game;
     }
 
     public void populatePlayers(int playerCount) throws Error {
@@ -21,7 +26,7 @@ public class World {
         for (int i = 0; i < playerCount; i++) {
             int[] startPos = Player.playerStartPosMap[i];
             Color color = Player.playerColorMap[i];
-            players.add(new Player(startPos[0], startPos[1], color, this));
+            players.add(new Player(startPos[0], startPos[1], color, game));
         }
     }
     
