@@ -1,5 +1,6 @@
 package me.diequoridors;
 
+import me.diequoridors.ui.KeyListener;
 import me.diequoridors.ui.MouseListener;
 import me.diequoridors.ui.Renderer;
 import me.diequoridors.ui.WindowInteractions;
@@ -12,6 +13,7 @@ public class Game {
     public final Renderer renderer;
     private final WindowInteractions windowInteractions;
     public final MouseListener mouseListener;
+    private final KeyListener keyListener;
     public final World world;
     
     public Game(int playerCount, int wallLimit) {
@@ -19,11 +21,13 @@ public class Game {
         renderer = new Renderer(this);
         windowInteractions = new WindowInteractions(this);
         mouseListener = new MouseListener(this);
+        keyListener = new KeyListener(this);
 
         world.populatePlayers(playerCount);
     }
 
     public void exit() {
+        keyListener.removeListener();
         mouseListener.removeListener();
         windowInteractions.removeListener();
         renderer.exit();
