@@ -10,8 +10,8 @@ public class WindowInteractions extends WindowAdapter {
     private final Renderer renderer;
     private final Game game;
 
-    public WindowInteractions(Renderer renderer, Game game) {
-        this.renderer = renderer;
+    public WindowInteractions(Game game) {
+        this.renderer = game.renderer;
         this.game = game;
         renderer.frame.addWindowListener(this);
     }

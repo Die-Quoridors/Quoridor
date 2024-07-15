@@ -1,5 +1,6 @@
 package me.diequoridors.ui;
 
+import me.diequoridors.Game;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.WallRotation;
 import me.diequoridors.world.World;
@@ -16,14 +17,18 @@ public class MouseListener extends MouseAdapter {
     private Player movingPlayer;
     private Player wallPlayer;
 
-    public MouseListener(Renderer renderer, World world) {
-        this.renderer = renderer;
-        this.world = world;
+    public Player phantomPlayer;
+
+    public MouseListener(Game game) {
+        this.renderer = game.renderer;
+        this.world = game.world;
         renderer.canvas.addMouseListener(this);
+        renderer.canvas.addMouseMotionListener(this);
     }
 
     public void removeListener() {
         renderer.canvas.removeMouseListener(this);
+        renderer.canvas.removeMouseMotionListener(this);
     }
 
     @Override
@@ -34,9 +39,23 @@ public class MouseListener extends MouseAdapter {
                 && e.getY() > renderer.coordinatesToScreen(player.y)
                 && e.getY() < renderer.coordinatesToScreen(player.y + 1)
         ).findFirst();
-        clickedPlayer.ifPresent(player -> movingPlayer = player);
+        clickedPlayer.ifPresent(player -> {
+            movingPlayer = player;
+            phantomPlayer = new Player(player);
+        });
 
         wallPlayer = renderer.screenToWallPlayer(e.getX(), e.getY());
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        if (movingPlayer != null) {
+            int x = renderer.screenToCoordinates(e.getX(), false);
+            int y = renderer.screenToCoordinates(e.getY(), false);
+            phantomPlayer.x = movingPlayer.x;;
+            phantomPlayer.y = movingPlayer.y;
+            phantomPlayer.move(x, y);
+        }
     }
 
     @Override
@@ -46,6 +65,7 @@ public class MouseListener extends MouseAdapter {
             int y = renderer.screenToCoordinates(e.getY(), false);
             movingPlayer.move(x, y);
             movingPlayer = null;
+            phantomPlayer = null;
         } else if (wallPlayer != null) {
             int x = renderer.screenToCoordinates(e.getX(), true);
             int y = renderer.screenToCoordinates(e.getY(), true);

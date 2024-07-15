@@ -1,5 +1,6 @@
 package me.diequoridors.ui;
 
+import me.diequoridors.Game;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
@@ -16,14 +17,16 @@ public class Renderer {
     private static final int wallWidth = 10;
 
     private final World world;
+    private final Game game;
 
     public final Frame frame = new Frame();
     public final Canvas canvas = new Canvas();
 
     private final Timer frameTimer = new Timer();
 
-    public Renderer(World world) {
-        this.world = world;
+    public Renderer(Game game) {
+        this.game = game;
+        this.world = game.world;
 
         frame.setVisible(true);
         frame.setLayout(null);
@@ -126,6 +129,18 @@ public class Renderer {
             int y = player.y * cellSize + cellOffset + cellSize;
 
             graphics.setColor(player.color);
+            graphics.fillOval(x, y, usableCellSize, usableCellSize);
+            graphics.setColor(Color.BLACK);
+            graphics.drawOval(x, y, usableCellSize, usableCellSize);
+        }
+
+        // === render phantom Player ===
+        Player phantomPlayer = game.mouseListener.phantomPlayer;
+        if (phantomPlayer != null) {
+            int x = phantomPlayer.x * cellSize + cellOffset + cellSize;
+            int y = phantomPlayer.y * cellSize + cellOffset + cellSize;
+
+            graphics.setColor(phantomPlayer.color);
             graphics.fillOval(x, y, usableCellSize, usableCellSize);
             graphics.setColor(Color.BLACK);
             graphics.drawOval(x, y, usableCellSize, usableCellSize);

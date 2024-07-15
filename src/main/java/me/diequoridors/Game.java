@@ -9,16 +9,16 @@ import me.diequoridors.world.World;
 
 public class Game {
 
-    private final Renderer renderer;
+    public final Renderer renderer;
     private final WindowInteractions windowInteractions;
-    private final MouseListener mouseListener;
-    private final World world;
+    public final MouseListener mouseListener;
+    public final World world;
     
     public Game(int playerCount, int wallLimit) {
         world = new World(wallLimit);
-        renderer = new Renderer(world);
-        windowInteractions = new WindowInteractions(renderer, this);
-        mouseListener = new MouseListener(renderer, world);
+        renderer = new Renderer(this);
+        windowInteractions = new WindowInteractions(this);
+        mouseListener = new MouseListener(this);
 
         world.populatePlayers(playerCount);
     }

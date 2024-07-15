@@ -25,6 +25,13 @@ public class Player {
         this.world = world;
     }
 
+    public Player(Player player) {
+        this.x = player.x;
+        this.y = player.y;
+        this.color = player.color;
+        this.world = player.world;
+    }
+
     public void move(int x, int y) {
         int travelDistance = Math.abs(this.x - x) + Math.abs(this.y - y);
         if (travelDistance > 1 || travelDistance == 0) {
