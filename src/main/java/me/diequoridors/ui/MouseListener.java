@@ -2,7 +2,6 @@ package me.diequoridors.ui;
 
 import me.diequoridors.Game;
 import me.diequoridors.world.Player;
-import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
 
 import java.awt.event.MouseAdapter;
