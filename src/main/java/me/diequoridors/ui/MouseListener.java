@@ -91,9 +91,7 @@ public class MouseListener extends MouseAdapter {
                 phantomWall = null;
                 return;
             }
-            int x = Math.min(Renderer.gridSize - 2, mouseX);
-            int y = Math.min(Renderer.gridSize - 2, mouseY);
-            wallPlayer.placeWall(x, y, phantomWall.rotation);
+            wallPlayer.placeWall(mouseX, mouseY, phantomWall.rotation);
             phantomWall = null;
         }
     }
