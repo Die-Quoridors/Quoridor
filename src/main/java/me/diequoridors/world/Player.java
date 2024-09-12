@@ -19,7 +19,7 @@ public class Player {
     public int y;
 
     public final Color color;
-    private final Game game;
+    public final Game game;
     private final boolean isClone;
 
     public Player(int x, int y, Color color, Game game) {
@@ -177,6 +177,11 @@ public class Player {
         if (placedWalls >= game.world.wallLimit) {
             return;
         }
+        boolean placementValid = Wall.placementValid(game.world, x, y, rotation);
+        if (!placementValid) {
+            return;
+        }
+
         Wall wall = new Wall(x, y, rotation, this);
         game.world.walls.add(wall);
         if (!isClone && game.networkAdapter != null) {

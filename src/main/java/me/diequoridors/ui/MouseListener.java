@@ -17,7 +17,7 @@ public class MouseListener extends MouseAdapter {
     private Player wallPlayer;
 
     public Player phantomPlayer;
-    public Wall phantomWall;
+    public PhantomWall phantomWall;
 
     public MouseListener(Game game) {
         this.game = game;
@@ -53,7 +53,7 @@ public class MouseListener extends MouseAdapter {
         if (wallPlayer != null) {
             int x = game.renderer.screenToCoordinates(e.getX(), true);
             int y = game.renderer.screenToCoordinates(e.getY(), true);
-            phantomWall = new Wall(x, y, WallRotation.Vertical, wallPlayer);
+            phantomWall = new PhantomWall(x, y, WallRotation.Vertical, wallPlayer);
         }
     }
 

@@ -160,7 +160,7 @@ public class Renderer {
 
         // === render phantom Wall
 
-        Wall phantomWall = game.mouseListener.phantomWall;
+        PhantomWall phantomWall = game.mouseListener.phantomWall;
         if (phantomWall != null) {
             int x = phantomWall.x * cellSize + (phantomWall.rotation == WallRotation.Horizontal ? 0 : cellSize - (wallWidth / 2)) + cellSize;
             int y = phantomWall.y * cellSize + (phantomWall.rotation == WallRotation.Horizontal ? (cellSize - (wallWidth / 2)) : 0) + cellSize;
@@ -168,7 +168,7 @@ public class Renderer {
             int width = phantomWall.rotation == WallRotation.Vertical ? wallWidth : (cellSize * 2);
             int height = phantomWall.rotation == WallRotation.Horizontal ? wallWidth : (cellSize * 2);
 
-            graphics.setColor(Color.BLACK);
+            graphics.setColor(phantomWall.isValid() ? Color.GRAY : Color.RED);
             graphics.fillRect(x, y, width, height);
         }
 
