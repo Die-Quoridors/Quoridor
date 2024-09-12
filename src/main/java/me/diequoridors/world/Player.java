@@ -39,6 +39,8 @@ public class Player {
     }
 
     private boolean isValidMove(int x, int y) {
+
+        // check Walls
         for (Wall wall : game.world.walls) {
             if (this.y - y > 0) { // Up
                 if (wall.x == this.x - 1 && wall.y == this.y - 1 && wall.rotation == WallRotation.Horizontal) {
@@ -74,89 +76,84 @@ public class Player {
         int travelX = x - this.x;
         int travelY = y - this.y;
 
-        if (Math.abs(travelX) > 1 || Math.abs(travelY) > 1) {
-            return false;
-        }
-
+        // check target is free
         Optional<Player> collisionPlayer = game.world.players.stream().filter(player -> player.x == x && player.y == y && !player.isClone).findFirst();
         if (collisionPlayer.isPresent()) {
             return false;
         }
 
+        // check travel no more than 2 or no move
         int travelDistance = Math.abs(this.x - x) + Math.abs(this.y - y);
         if (travelDistance == 0 || travelDistance > 2) {
             return false;
         }
-        if (travelDistance == 2) {
-            int mX = this.x + (travelX / 2);
-            int mY = this.y + (travelY / 2);
-            Optional<Player> skipPlayer = game.world.players.stream().filter(player -> player.x == mX && player.y == mY && !player.isClone).findFirst();
-            if (skipPlayer.isEmpty() && (travelX == 2 || travelY == 2)) {
-                return false;
-            }
-            if (Math.abs(travelX) == 1 && Math.abs(travelY) == 1) {
-                Optional<Player> diaPlayer1 = game.world.players.stream().filter(player -> player.x == (this.x + travelX) && player.y == this.y && !player.isClone).findFirst();
-                Optional<Player> diaPlayer2 = game.world.players.stream().filter(player -> player.x == this.x && player.y == (this.y + travelY) && !player.isClone).findFirst();
 
-                ArrayList<Player> p = new ArrayList<>();
-                diaPlayer1.ifPresent(p::add);
-                diaPlayer2.ifPresent(p::add);
+        // finish normal moves
+        if (travelDistance == 1) {
+            return true;
+        }
 
-//                if (p.isEmpty()) {
-//                    return false;
-//                }
+        // == check special moves ==
+        int mX = this.x + (travelX / 2);
+        int mY = this.y + (travelY / 2);
 
-                for (Player diaPlayer : p) {
-                    int pDiffX = diaPlayer.x - this.x;
-                    int pDiffY = diaPlayer.y - this.y;
-                    System.out.println("Dia Player X/Y:" + diaPlayer.x + "/" + diaPlayer.y + " | Diff X/Y:" + pDiffX + "/" + pDiffY);
-                    WallRotation reqWallDir = pDiffX == 0 ? WallRotation.Horizontal : WallRotation.Vertical;
-                    System.out.println("ReqWallDir: " + reqWallDir);
-                    boolean wallMatch = false;
-                    for (Wall wall : game.world.walls) {
-                        if (wall.rotation != reqWallDir) {
-                            continue;
-                        }
+        // check player skipping
+        Optional<Player> skipPlayer = game.world.players.stream().filter(player -> player.x == mX && player.y == mY && !player.isClone).findFirst();
+        if (Math.abs(travelX) == 2 || Math.abs(travelY) == 2) {
+            return skipPlayer.isPresent();
+        }
 
-                        if (pDiffX == 0) {
-                            System.out.println("pDiffX = 0 | pDiffY = " + pDiffY);
-                            System.out.println("Wall X/Y: " + wall.x + "/" + wall.y);
-                            int offY = pDiffY > 0 ? pDiffY - 1 : pDiffY;
-                            if ((wall.x + 1) == diaPlayer.x && wall.y == (diaPlayer.y + offY)) {
-                                System.out.println("Wall Match");
-                                wallMatch = true;
-                                break;
-                            }
-                            if (wall.x == diaPlayer.x && wall.y == (diaPlayer.y + offY)) {
-                                System.out.println("Wall Match");
-                                wallMatch = true;
-                                break;
-                            }
-                        } else if (pDiffY == 0) {
-                            System.out.println("pDiffY = 0 | pDiffX = " + pDiffX);
-                            System.out.println("Wall X/Y: " + wall.x + "/" + wall.y);
-                            int offX = pDiffX > 0 ? pDiffX - 1 : pDiffX;
-                            if (wall.x == (diaPlayer.x + offX) && wall.y == diaPlayer.y) {
-                                wallMatch = true;
-                                break;
-                            }
-                            if (wall.x == (diaPlayer.x + offX) && (wall.y + 1) == diaPlayer.y) {
-                                wallMatch = true;
-                                break;
-                            }
-                        }
+        // check diagonals
+        if (Math.abs(travelX) == 1 && Math.abs(travelY) == 1) {
+            Optional<Player> diaPlayer1 = game.world.players.stream().filter(player -> player.x == (this.x + travelX) && player.y == this.y && !player.isClone).findFirst();
+            Optional<Player> diaPlayer2 = game.world.players.stream().filter(player -> player.x == this.x && player.y == (this.y + travelY) && !player.isClone).findFirst();
+
+            ArrayList<Player> p = new ArrayList<>();
+            diaPlayer1.ifPresent(p::add);
+            diaPlayer2.ifPresent(p::add);
+
+            for (Player diaPlayer : p) {
+                int pDiffX = diaPlayer.x - this.x;
+                int pDiffY = diaPlayer.y - this.y;
+                System.out.println("Dia Player X/Y:" + diaPlayer.x + "/" + diaPlayer.y + " | Diff X/Y:" + pDiffX + "/" + pDiffY);
+                WallRotation reqWallDir = pDiffX == 0 ? WallRotation.Horizontal : WallRotation.Vertical;
+                System.out.println("ReqWallDir: " + reqWallDir);
+                boolean wallMatch = false;
+                for (Wall wall : game.world.walls) {
+                    if (wall.rotation != reqWallDir) {
+                        continue;
                     }
 
-                    if (wallMatch) {
-                        return true;
+                    if (pDiffX == 0) {
+                        int offY = pDiffY > 0 ? pDiffY - 1 : pDiffY;
+                        if ((wall.x + 1) == diaPlayer.x && wall.y == (diaPlayer.y + offY)) {
+                            wallMatch = true;
+                            break;
+                        }
+                        if (wall.x == diaPlayer.x && wall.y == (diaPlayer.y + offY)) {
+                            wallMatch = true;
+                            break;
+                        }
+                    } else if (pDiffY == 0) {
+                        int offX = pDiffX > 0 ? pDiffX - 1 : pDiffX;
+                        if (wall.x == (diaPlayer.x + offX) && wall.y == diaPlayer.y) {
+                            wallMatch = true;
+                            break;
+                        }
+                        if (wall.x == (diaPlayer.x + offX) && (wall.y + 1) == diaPlayer.y) {
+                            wallMatch = true;
+                            break;
+                        }
                     }
                 }
 
-                return false;
+                if (wallMatch) {
+                    return true;
+                }
             }
         }
 
-        return true;
+        return false;
     }
 
     public void move(int x, int y) {
