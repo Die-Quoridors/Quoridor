@@ -1,6 +1,8 @@
 package me.diequoridors;
 
 import me.diequoridors.network.ServerNetworkAdapter;
+import me.diequoridors.world.Player;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,6 +12,7 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class Menu {
@@ -132,6 +135,16 @@ public class Menu {
         });
 
         frame.setVisible(true);
+    }
+
+    public static void showWinner(Player player) {
+        boolean isWinner = player == player.game.world.ownPlayer;
+        int winnerIndex = ArrayUtils.indexOf(Player.playerColorMap, player.color);
+        if (isWinner) {
+            showPopup("Gewonnen", "Du hast gewonnen");
+        } else {
+            showPopup("Verloren", "Spieler " + winnerIndex + " hat gewonnen");
+        }
     }
 
     private static void showPopup(String title, String body) {

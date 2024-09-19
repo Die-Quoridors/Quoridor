@@ -170,6 +170,7 @@ public class Player {
         if (!isClone && game.networkAdapter != null) {
             game.networkAdapter.sendPlayerMove(this);
         }
+        game.updatePlayers();
     }
     
     public void placeWall(int x, int y, WallRotation rotation) {

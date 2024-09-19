@@ -58,4 +58,14 @@ public class Game {
         
         return null;
     }
+
+    public void updatePlayers() {
+        Player winner = getWinner();
+        if (winner == null) {
+            return;
+        }
+
+        Menu.showWinner(winner);
+        exit();
+    }
 }
