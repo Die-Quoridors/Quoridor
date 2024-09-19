@@ -85,7 +85,7 @@ public class MouseListener extends MouseAdapter {
         } else if (wallPlayer != null) {
             int mouseX = game.renderer.screenToCoordinates(e.getX(), true);
             int mouseY = game.renderer.screenToCoordinates(e.getY(), true);
-            boolean inField = mouseX >= 1 && mouseY >= 1 && mouseX < (Renderer.gridSize - 1) && mouseY < (Renderer.gridSize - 1);
+            boolean inField = mouseX >= 0 && mouseY >= 0 && mouseX < (Renderer.gridSize - 1) && mouseY < (Renderer.gridSize - 1);
             if (!inField) {
                 phantomWall = null;
                 return;
