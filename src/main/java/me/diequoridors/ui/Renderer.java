@@ -72,7 +72,7 @@ public class Renderer {
         int cellSize = getCellSize();
         int offset = wall ? cellSize / 2 : 0;
         int coord = (screen - cellSize - offset) / cellSize;
-        return Math.min(gridSize, Math.max(0, coord));
+        return Math.min(gridSize, Math.max(-1, coord));
     }
 
     public Player screenToWallPlayer(int screenX, int screenY) {
