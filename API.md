@@ -1,3 +1,43 @@
+# Die HTTP API von diesem Spiel
+
+## GET /info
+```
+{
+    "wsPort": Int // der port des ws servers
+}
+```
+
+## POST /game
+Anfrage: 
+```
+{
+    "playerCount": Int // die Anzahl der Spieler in dieser Runde
+    "wallLimit": Int // die Anzahl der Waende in dieser Runde
+}
+```
+
+Antwort:
+```
+{
+    "gameId": String // Die GameId des Spieles das erstellt wurde
+}
+```
+
+## GET /game/:gameId
+```
+{
+    "strictPlayer": Boolean // true: der Spieler kann sich nur selber bewegen / false: jeder kann jeden bewegen
+    "playerCount": Int // die Anzahl der Spieler in dieser Runde
+    "wallLimit": Int // die Anzahl der Waende in dieser Runde
+    "currentPlayers": Int // die Anzahl der aktuellen Spieler in der Runde
+}
+```
+
+## DELETE /game/:gameId
+```
+
+```
+
 # Die WebSocket API von diesem Spiel
 
 ## Aufbau jedes Pakets
@@ -20,6 +60,14 @@ Client -> Server
 ```
 {
     "game": String // Die GameId der Spieles dem beigetreten werden soll
+}
+```
+
+### gameLeave
+Server -> Client
+```
+{
+    "player": Int // Die SpielerId des Spielers der das Spiel verlassen hat
 }
 ```
 

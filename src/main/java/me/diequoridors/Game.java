@@ -43,7 +43,8 @@ public class Game {
         mouseListener.removeListener();
         windowInteractions.removeListener();
         renderer.exit();
-        System.exit(0);
+//        System.exit(0);
+        Menu.showMainMenu();
     }
 
     public Player getWinner() {

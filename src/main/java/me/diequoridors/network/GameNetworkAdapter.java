@@ -28,6 +28,9 @@ public class GameNetworkAdapter {
                     case "gameInit":
                         hndGameInit(data);
                         break;
+                    case "gameLeave":
+                        hndGameLeave(data);
+                        break;
                     case "playerMove":
                         hndPlayerMove(data);
                         break;
@@ -59,6 +62,10 @@ public class GameNetworkAdapter {
         JSONObject data = new JSONObject();
         data.put("game", gameId);
         socket.emit("gameJoin", data);
+    }
+
+    private void hndGameLeave(JSONObject data) {
+        // TODO: Popup
     }
 
     private void hndGameInit(JSONObject data) {

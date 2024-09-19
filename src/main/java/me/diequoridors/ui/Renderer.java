@@ -50,6 +50,7 @@ public class Renderer {
                 renderFrame();
             }
         }, 1000 / 60, 1000 / 60);
+        frame.setSize(new Dimension(880, 880 + frame.getInsets().top));
     }
 
     public void exit() {
@@ -108,8 +109,6 @@ public class Renderer {
         int cellSize = getCellSize();
         int usableCellSize = (int) (cellSize * (1 - 2 * cellPadding));
         int cellOffset = (int) (cellSize * cellPadding);
-        int frameHeight = frame.getHeight() - frame.getInsets().top;
-        int frameWidth = frame.getWidth();
 
         canvas.setBounds(0, frame.getInsets().top, windowSize, windowSize);
         canvas.setSize(new Dimension(windowSize, windowSize));
@@ -117,13 +116,6 @@ public class Renderer {
         // === render Grid ===
         graphics.setColor(Color.decode("#915a2e"));
         for (int i = 0; i < gridSize; i++) {
-//            if (i == 0 || i == gridSize) {
-//                graphics.setColor(Color.BLACK);
-//            } else {
-//                graphics.setColor(Color.LIGHT_GRAY);
-//            }
-//            graphics.drawLine(i * cellSize + cellSize, cellSize, i * cellSize + cellSize, frameHeight - cellSize);
-//            graphics.drawLine(cellSize, i * cellSize + cellSize, frameWidth - cellSize, i * cellSize + cellSize);
             for (int y = 0; y < gridSize; y++) {
                 graphics.fillRect(cellSize + i * cellSize + 5, cellSize + y * cellSize + 5, cellSize - 10, cellSize - 10);
             }
