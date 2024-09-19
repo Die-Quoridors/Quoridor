@@ -101,6 +101,8 @@ public class Renderer {
     private void renderFrame() {
         Graphics graphics = canvas.getBufferStrategy().getDrawGraphics();
         graphics.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        graphics.setColor(Color.decode("#e0985e"));
+        graphics.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
         int windowSize = Math.min(frame.getWidth(), frame.getHeight() - frame.getInsets().top);
         int cellSize = getCellSize();
@@ -113,14 +115,18 @@ public class Renderer {
         canvas.setSize(new Dimension(windowSize, windowSize));
 
         // === render Grid ===
-        for (int i = 0; i <= gridSize; i++) {
-            if (i == 0 || i == gridSize) {
-                graphics.setColor(Color.BLACK);
-            } else {
-                graphics.setColor(Color.LIGHT_GRAY);
+        graphics.setColor(Color.decode("#915a2e"));
+        for (int i = 0; i < gridSize; i++) {
+//            if (i == 0 || i == gridSize) {
+//                graphics.setColor(Color.BLACK);
+//            } else {
+//                graphics.setColor(Color.LIGHT_GRAY);
+//            }
+//            graphics.drawLine(i * cellSize + cellSize, cellSize, i * cellSize + cellSize, frameHeight - cellSize);
+//            graphics.drawLine(cellSize, i * cellSize + cellSize, frameWidth - cellSize, i * cellSize + cellSize);
+            for (int y = 0; y < gridSize; y++) {
+                graphics.fillRect(cellSize + i * cellSize + 5, cellSize + y * cellSize + 5, cellSize - 10, cellSize - 10);
             }
-            graphics.drawLine(i * cellSize + cellSize, cellSize, i * cellSize + cellSize, frameHeight - cellSize);
-            graphics.drawLine(cellSize, i * cellSize + cellSize, frameWidth - cellSize, i * cellSize + cellSize);
         }
 
         // === render Players ===
