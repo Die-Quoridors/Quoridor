@@ -46,7 +46,7 @@ public class Game {
         System.exit(0);
     }
 
-    public Player getWinnner() {
+    public Player getWinner() {
         for (int i = 0; i < world.players.size(); i++) {
             Player player = world.players.get(i);
             int[] winArea = Player.playerWinArea[i];
