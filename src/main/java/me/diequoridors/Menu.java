@@ -12,10 +12,11 @@ import java.awt.event.WindowEvent;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class Menu {
+
+    private static final String[] playerColorTranslations = {"Weiss", "Schwarz", "Zyan", "Rosa"};
 
     public static void showMainMenu() {
         Frame frame = new Frame("Quoridor");
@@ -143,8 +144,12 @@ public class Menu {
         if (isWinner) {
             showPopup("Gewonnen", "Du hast gewonnen");
         } else {
-            showPopup("Verloren", "Spieler " + winnerIndex + " hat gewonnen");
+            showPopup("Verloren", "Spieler " + playerColorTranslations[winnerIndex] + " hat gewonnen");
         }
+    }
+
+    public static void playerLeave(int playerIndex) {
+        showPopup("Spieler hat das Spiel verlassen", "Der Spieler " + playerColorTranslations[playerIndex] + " hat das Spiel verlassen!");
     }
 
     private static void showPopup(String title, String body) {

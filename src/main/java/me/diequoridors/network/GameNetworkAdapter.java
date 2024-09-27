@@ -1,6 +1,7 @@
 package me.diequoridors.network;
 
 import me.diequoridors.Game;
+import me.diequoridors.Menu;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
@@ -51,6 +52,10 @@ public class GameNetworkAdapter {
         };
     }
 
+    public void close() {
+        socket.close();
+    }
+
     private void hndError(JSONObject data) {
         String error = data.getString("error");
         System.out.print("Socket Error: ");
@@ -65,7 +70,8 @@ public class GameNetworkAdapter {
     }
 
     private void hndGameLeave(JSONObject data) {
-        // TODO: Popup
+        int playerIndex = data.getInt("player");
+        Menu.playerLeave(playerIndex);
     }
 
     private void hndGameInit(JSONObject data) {
