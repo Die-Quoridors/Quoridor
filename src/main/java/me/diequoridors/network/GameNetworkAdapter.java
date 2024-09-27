@@ -121,6 +121,7 @@ public class GameNetworkAdapter {
         Player player = game.world.players.get(id);
         player.x = x;
         player.y = y;
+        game.updatePlayers();
     }
 
     public void sendWallPlace(Wall wall) {
