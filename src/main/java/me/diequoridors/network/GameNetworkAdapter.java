@@ -51,6 +51,10 @@ public class GameNetworkAdapter {
         };
     }
 
+    public void close() {
+        socket.close();
+    }
+
     private void hndError(JSONObject data) {
         String error = data.getString("error");
         System.out.print("Socket Error: ");
