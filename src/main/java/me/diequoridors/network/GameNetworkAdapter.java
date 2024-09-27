@@ -32,6 +32,9 @@ public class GameNetworkAdapter {
                     case "nextPlayer":
                         hndNextPlayer(data);
                         break;
+                    case "playerJoin":
+                        hndPlayerJoin(data);
+                        break;
                     case "gameLeave":
                         hndGameLeave(data);
                         break;
@@ -90,8 +93,13 @@ public class GameNetworkAdapter {
         System.out.println("connected to game as player " + ownPlayerId);
     }
 
-    public void hndNextPlayer(JSONObject data) {
+    private void hndNextPlayer(JSONObject data) {
         game.turnPlayer = data.getInt("player");
+    }
+
+    private void hndPlayerJoin(JSONObject data) {
+        int playerIndex = data.getInt("player");
+        Menu.playerJoin(playerIndex);
     }
 
     public void sendPlayerMove(Player player) {

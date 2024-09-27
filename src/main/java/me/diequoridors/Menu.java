@@ -152,6 +152,10 @@ public class Menu {
         showPopup("Spieler hat das Spiel verlassen", "Der Spieler " + playerColorTranslations[playerIndex] + " hat das Spiel verlassen!");
     }
 
+    public static void playerJoin(int playerIndex) {
+        showPopup("Spieler hat das Spiel betreten", "Der Spieler " + playerColorTranslations[playerIndex] + " hat das Spiel betreten!");
+    }
+
     private static void showPopup(String title, String body) {
         JOptionPane.showMessageDialog(null, body, title, JOptionPane.INFORMATION_MESSAGE);
     }
