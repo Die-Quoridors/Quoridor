@@ -74,7 +74,7 @@ public class Game {
     }
 
     public void nextTurn() {
-        if (turnPlayer + 1 <= world.players.size()) {
+        if (turnPlayer + 1 >= world.players.size()) {
             turnPlayer = 0;
         } else {
             turnPlayer++;

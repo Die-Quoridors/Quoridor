@@ -208,7 +208,7 @@ public class Player {
             game.networkAdapter.sendPlayerMove(this);
         }
         game.updatePlayers();
-        if (game.networkAdapter == null) {
+        if (!isClone && game.networkAdapter == null) {
             game.nextTurn();
         }
     }
@@ -232,7 +232,7 @@ public class Player {
         if (!isClone && game.networkAdapter != null) {
             game.networkAdapter.sendWallPlace(wall);
         }
-        if (game.networkAdapter == null) {
+        if (!isClone && game.networkAdapter == null) {
             game.nextTurn();
         }
     }
