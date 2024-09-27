@@ -126,7 +126,7 @@ public class Renderer {
             int x = player.x * cellSize + cellOffset + cellSize;
             int y = player.y * cellSize + cellOffset + cellSize;
 
-            graphics.setColor(player.color);
+            graphics.setColor(player.getColor());
             graphics.fillOval(x, y, usableCellSize, usableCellSize);
             graphics.setColor(Color.BLACK);
             graphics.drawOval(x, y, usableCellSize, usableCellSize);
@@ -138,7 +138,7 @@ public class Renderer {
             int x = phantomPlayer.x * cellSize + cellOffset + cellSize;
             int y = phantomPlayer.y * cellSize + cellOffset + cellSize;
 
-            graphics.setColor(phantomPlayer.color);
+            graphics.setColor(phantomPlayer.getColor());
             graphics.fillOval(x, y, usableCellSize, usableCellSize);
             graphics.setColor(Color.BLACK);
             graphics.drawOval(x, y, usableCellSize, usableCellSize);

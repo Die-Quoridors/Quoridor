@@ -25,8 +25,7 @@ public class World {
 
         for (int i = 0; i < playerCount; i++) {
             int[] startPos = Player.playerStartPosMap[i];
-            Color color = Player.playerColorMap[i];
-            players.add(new Player(startPos[0], startPos[1], color, game));
+            players.add(new Player(startPos[0], startPos[1], i, game));
         }
     }
     

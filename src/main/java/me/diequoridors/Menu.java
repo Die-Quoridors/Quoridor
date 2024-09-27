@@ -140,7 +140,7 @@ public class Menu {
 
     public static void showWinner(Player player) {
         boolean isWinner = player == player.game.world.ownPlayer;
-        int winnerIndex = ArrayUtils.indexOf(Player.playerColorMap, player.color);
+        int winnerIndex = ArrayUtils.indexOf(Player.playerColorMap, player.getColor());
         if (isWinner) {
             showPopup("Gewonnen", "Du hast gewonnen");
         } else {

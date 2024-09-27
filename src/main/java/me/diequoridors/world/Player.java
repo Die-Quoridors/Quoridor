@@ -19,14 +19,14 @@ public class Player {
     public int x;
     public int y;
 
-    public final Color color;
+    public final int playerId;
     public final Game game;
     private final boolean isClone;
 
-    public Player(int x, int y, Color color, Game game) {
+    public Player(int x, int y, int playerId, Game game) {
         this.x = x;
         this.y = y;
-        this.color = color;
+        this.playerId = playerId;
         this.game = game;
         this.isClone = false;
     }
@@ -34,9 +34,13 @@ public class Player {
     public Player(Player player) {
         this.x = player.x;
         this.y = player.y;
-        this.color = player.color;
+        this.playerId = player.playerId;
         this.game = player.game;
         this.isClone = true;
+    }
+
+    public Color getColor() {
+        return playerColorMap[playerId];
     }
 
     private boolean isValidMove(int x, int y) {
@@ -217,14 +221,5 @@ public class Player {
         if (!isClone && game.networkAdapter != null) {
             game.networkAdapter.sendWallPlace(wall);
         }
-    }
-
-    public static int playerToIndex(Player player) {
-        for (int i = 0; i < playerColorMap.length; i++) {
-            if (player.color.equals(playerColorMap[i])) {
-                return i;
-            }
-        }
-        return -1;
     }
 }

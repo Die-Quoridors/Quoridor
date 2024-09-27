@@ -96,7 +96,7 @@ public class GameNetworkAdapter {
 
     public void sendPlayerMove(Player player) {
         JSONObject data = new JSONObject();
-        data.put("player", Player.playerToIndex(player));
+        data.put("player", player.playerId);
         data.put("x", player.x);
         data.put("y", player.y);
         socket.emit("playerMove", data);
@@ -113,7 +113,7 @@ public class GameNetworkAdapter {
 
     public void sendWallPlace(Wall wall) {
         JSONObject data = new JSONObject();
-        data.put("player", Player.playerToIndex(wall.placer));
+        data.put("player", wall.placer.playerId);
         data.put("x", wall.x);
         data.put("y", wall.y);
         data.put("rotation", wall.rotation.toString());
