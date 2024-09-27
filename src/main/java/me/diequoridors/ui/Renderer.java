@@ -130,6 +130,19 @@ public class Renderer {
             graphics.fillOval(x, y, usableCellSize, usableCellSize);
             graphics.setColor(Color.BLACK);
             graphics.drawOval(x, y, usableCellSize, usableCellSize);
+
+            if (player.playerId == game.turnPlayer) {
+                // is current player
+
+                int xo = x + (int)(cellSize * cellPadding * 2);
+                int yo = y + (int)(cellSize * cellPadding * 2);
+                int cellSizeIn = (cellSize - (int)(cellSize * cellPadding * 6));
+                int[] px = {xo, xo + (cellSizeIn / 2), xo + cellSizeIn};
+                int[] py = {yo + cellSizeIn, yo, yo + cellSizeIn};
+
+                graphics.setColor(Color.RED);
+                graphics.fillPolygon(px, py, 3);
+            }
         }
 
         // === render phantom Player ===
