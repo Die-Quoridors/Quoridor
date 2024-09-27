@@ -43,9 +43,10 @@ public class Game {
         keyListener.removeListener();
         mouseListener.removeListener();
         windowInteractions.removeListener();
-        networkAdapter.close();
+        if (networkAdapter != null) {
+            networkAdapter.close();
+        }
         renderer.exit();
-        networkAdapter.close();
 //        System.exit(0);
         Menu.showMainMenu();
     }
