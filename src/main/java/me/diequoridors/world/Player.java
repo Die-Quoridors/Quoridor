@@ -15,6 +15,7 @@ public class Player {
     public static final int[][] playerWinArea = {{0, 8, 8, 1}, {0, 0, 8, 1}, {8, 0, 1, 8}, {0, 0, 1, 8}};
     public static final int[][] playerWallDepotArea = {{0, 0}, {0, 10}, {0, 0}, {10, 0}};
     public static final WallRotation[] playerTargetDirection = {WallRotation.Vertical, WallRotation.Vertical, WallRotation.Horizontal, WallRotation.Horizontal};
+    public static final int[][] playerTurnMappings = {{}, {0}, {0, 1}, {0, 1, 2}, {0, 3, 1, 2}};
 
     public int x;
     public int y;

@@ -9,6 +9,7 @@ import me.diequoridors.world.Player;
 import me.diequoridors.world.World;
 
 import java.net.URI;
+import java.util.Arrays;
 
 
 public class Game {
@@ -74,10 +75,14 @@ public class Game {
     }
 
     public void nextTurn() {
-        if (turnPlayer + 1 >= world.players.size()) {
-            turnPlayer = 0;
+        int[] turnMappings = Player.playerTurnMappings[world.players.size()];
+        int turnStage = Arrays.stream(turnMappings).reduce(-1, (p, o) -> o == turnPlayer ? -(p + 1) : (p < 0 ? p - 1 : p));
+        System.out.println(turnStage);
+        if (turnStage + 1 >= world.players.size()) {
+            turnStage = 0;
         } else {
-            turnPlayer++;
+            turnStage++;
         }
+        turnPlayer = turnMappings[turnStage];
     }
 }
