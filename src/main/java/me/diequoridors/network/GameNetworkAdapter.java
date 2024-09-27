@@ -5,6 +5,7 @@ import me.diequoridors.Menu;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.Wall;
 import me.diequoridors.world.WallRotation;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URI;
@@ -43,6 +44,9 @@ public class GameNetworkAdapter {
                         break;
                     case "wallPlace":
                         hndWallPlace(data);
+                        break;
+                    case "syncResponse":
+                        hndSync(data);
                         break;
                     default:
                         System.out.println("Event " + event + " not found");
@@ -137,6 +141,31 @@ public class GameNetworkAdapter {
         WallRotation rotation = WallRotation.valueOf(rotationId);
         Wall wall = new Wall(x, y, rotation, player);
         game.world.walls.add(wall);
+    }
+
+    private void hndSync(JSONObject data) {
+        JSONArray players = data.getJSONArray("players");
+        JSONArray walls = data.getJSONArray("walls");
+
+        for (int i = 0; i < players.length(); i++) {
+            JSONObject playerData = players.getJSONObject(i);
+            int x = playerData.getInt("x");
+            int y = playerData.getInt("y");
+            
+            Player player = game.world.players.get(i);
+            player.x = x;
+            player.y = y;
+        }
+
+        game.world.walls.clear();
+        for (int i = 0; i < walls.length(); i++) {
+            JSONObject wallData = walls.getJSONObject(i);
+            int x = wallData.getInt("x");
+            int y = wallData.getInt("y");
+            WallRotation rotation = WallRotation.valueOf(wallData.getString("rotation"));
+            Player player = game.world.players.get(wallData.getInt("placer"));
+            game.world.walls.add(new Wall(x, y, rotation, player));
+        }
     }
 
 }
