@@ -81,6 +81,14 @@ Server -> Client
 }
 ```
 
+### nextPlayer
+Server -> Client
+```
+{
+    "player": Int // der Index des Spieler der jetzt dran ist
+}
+```
+
 ### playerMove
 Server <-> Client
 ```
