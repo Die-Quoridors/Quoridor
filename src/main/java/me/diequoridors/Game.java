@@ -72,4 +72,8 @@ public class Game {
         Menu.showWinner(winner);
         exit();
     }
+
+    public boolean isTurn() {
+        return world.ownPlayer.playerId == turnPlayer;
+    }
 }

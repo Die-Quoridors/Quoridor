@@ -79,7 +79,9 @@ public class MouseListener extends MouseAdapter {
         if (movingPlayer != null) {
             int x = game.renderer.screenToCoordinates(e.getX(), false);
             int y = game.renderer.screenToCoordinates(e.getY(), false);
-            movingPlayer.move(x, y);
+            if (game.isTurn()) {
+                movingPlayer.move(x, y);
+            }
             movingPlayer = null;
             phantomPlayer = null;
         } else if (wallPlayer != null) {
@@ -90,7 +92,9 @@ public class MouseListener extends MouseAdapter {
                 phantomWall = null;
                 return;
             }
-            wallPlayer.placeWall(mouseX, mouseY, phantomWall.rotation);
+            if (game.isTurn()) {
+                wallPlayer.placeWall(mouseX, mouseY, phantomWall.rotation);
+            }
             phantomWall = null;
         }
     }
