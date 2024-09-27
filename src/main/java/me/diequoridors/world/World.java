@@ -2,7 +2,6 @@ package me.diequoridors.world;
 
 import me.diequoridors.Game;
 
-import java.awt.*;
 import java.util.ArrayList;
 
 public class World {
