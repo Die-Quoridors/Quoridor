@@ -73,7 +73,11 @@ public class Game {
         exit();
     }
 
-    public boolean isTurn() {
-        return world.ownPlayer.playerId == turnPlayer;
+    public void nextTurn() {
+        if (turnPlayer + 1 <= world.players.size()) {
+            turnPlayer = 0;
+        } else {
+            turnPlayer++;
+        }
     }
 }

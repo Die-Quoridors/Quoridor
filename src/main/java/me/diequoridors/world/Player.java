@@ -190,6 +190,10 @@ public class Player {
     }
 
     public void move(int x, int y) {
+        if (game.turnPlayer != playerId) {
+            return;
+        }
+
         if (x < 0 || y < 0 || x >= Renderer.gridSize || y >= Renderer.gridSize) {
             return;
         }
@@ -204,9 +208,16 @@ public class Player {
             game.networkAdapter.sendPlayerMove(this);
         }
         game.updatePlayers();
+        if (game.networkAdapter == null) {
+            game.nextTurn();
+        }
     }
     
     public void placeWall(int x, int y, WallRotation rotation) {
+        if (game.turnPlayer != playerId) {
+            return;
+        }
+
         long placedWalls = game.world.walls.stream().filter(wall -> wall.placer == this).count();
         if (placedWalls >= game.world.wallLimit) {
             return;
@@ -220,6 +231,9 @@ public class Player {
         game.world.walls.add(wall);
         if (!isClone && game.networkAdapter != null) {
             game.networkAdapter.sendWallPlace(wall);
+        }
+        if (game.networkAdapter == null) {
+            game.nextTurn();
         }
     }
 }
