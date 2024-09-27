@@ -91,7 +91,7 @@ public class GameNetworkAdapter {
     }
 
     public void hndNextPlayer(JSONObject data) {
-        game.turnPlayer = data.getInt("playerId");
+        game.turnPlayer = data.getInt("player");
     }
 
     public void sendPlayerMove(Player player) {
