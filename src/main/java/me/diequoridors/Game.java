@@ -9,6 +9,7 @@ import me.diequoridors.world.Player;
 import me.diequoridors.world.World;
 
 import java.net.URI;
+import java.util.Arrays;
 
 
 public class Game {
@@ -43,8 +44,10 @@ public class Game {
         keyListener.removeListener();
         mouseListener.removeListener();
         windowInteractions.removeListener();
+        if (networkAdapter != null) {
+            networkAdapter.close();
+        }
         renderer.exit();
-        networkAdapter.close();
 //        System.exit(0);
         Menu.showMainMenu();
     }
@@ -69,5 +72,16 @@ public class Game {
 
         Menu.showWinner(winner);
         exit();
+    }
+
+    public void nextTurn() {
+        int[] turnMappings = Player.playerTurnMappings[world.players.size()];
+        int turnStage = Arrays.stream(turnMappings).reduce(-1, (p, o) -> o == turnPlayer ? -(p + 1) : (p < 0 ? p - 1 : p));
+        if (turnStage + 1 >= world.players.size()) {
+            turnStage = 0;
+        } else {
+            turnStage++;
+        }
+        turnPlayer = turnMappings[turnStage];
     }
 }

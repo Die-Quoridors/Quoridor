@@ -81,6 +81,14 @@ Server -> Client
 }
 ```
 
+### nextPlayer
+Server -> Client
+```
+{
+    "player": Int // der Index des Spieler der jetzt dran ist
+}
+```
+
 ### playerMove
 Server <-> Client
 ```
@@ -99,5 +107,28 @@ Server <-> Client
     "x": Int // die X Koordinate der Wand
     "y": int // die Y Koordinate der Wand
     "rotation": String // die Drehung der Wand ['Vertical', 'Horizontal']
+}
+```
+
+### syncRequest
+Server <- Client
+```
+{}
+```
+
+### syncResponse
+Server -> Client
+```
+{
+    "players": { // Eine Liste aller Spieler
+        "x": Int // die X Koordinate eines Spielers
+        "y": Int // die Y Koordinate eines Spielers
+    }[]
+    "walls": { // Eine Liste aller Wände
+        "x": Int // die X Koordinate einer Wand
+        "y": Int // die Y Koordinate einer Wand
+        "rotation": String // die Drehung der Wand ['Vertical', 'Horizontal']
+        "placer": Int // die Id des Spielers, der die Wand plaziert hat
+    }[]
 }
 ```
