@@ -21,6 +21,7 @@ public class Game {
     private final KeyListener keyListener;
     public final World world;
     public GameNetworkAdapter networkAdapter;
+    public int turnPlayer = 0;
     
     public Game(int playerCount, int wallLimit) {
         world = new World(wallLimit, this);
@@ -44,6 +45,7 @@ public class Game {
         windowInteractions.removeListener();
         networkAdapter.close();
         renderer.exit();
+        networkAdapter.close();
 //        System.exit(0);
         Menu.showMainMenu();
     }
