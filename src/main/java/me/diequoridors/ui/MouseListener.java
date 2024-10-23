@@ -3,6 +3,7 @@ package me.diequoridors.ui;
 import me.diequoridors.Game;
 import me.diequoridors.world.Player;
 import me.diequoridors.world.WallRotation;
+import me.diequoridors.world.World;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -67,7 +68,7 @@ public class MouseListener extends MouseAdapter {
         } else if (wallPlayer != null) {
             int x = game.renderer.screenToCoordinates(e.getX(), true);
             int y = game.renderer.screenToCoordinates(e.getY(), true);
-            if (x >= 0 && y >= 0 && x < (Renderer.gridSize - 1) && y < (Renderer.gridSize - 1)) {
+            if (x >= 0 && y >= 0 && x < (World.worldSize - 1) && y < (World.worldSize - 1)) {
                 phantomWall.x = x;
                 phantomWall.y = y;
             }
@@ -85,7 +86,7 @@ public class MouseListener extends MouseAdapter {
         } else if (wallPlayer != null) {
             int mouseX = game.renderer.screenToCoordinates(e.getX(), true);
             int mouseY = game.renderer.screenToCoordinates(e.getY(), true);
-            boolean inField = mouseX >= 0 && mouseY >= 0 && mouseX < (Renderer.gridSize - 1) && mouseY < (Renderer.gridSize - 1);
+            boolean inField = mouseX >= 0 && mouseY >= 0 && mouseX < (World.worldSize - 1) && mouseY < (World.worldSize - 1);
             if (!inField) {
                 phantomWall = null;
                 return;

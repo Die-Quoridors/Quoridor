@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 public class World {
 
+    public static final int worldSize = 9;
+
     public ArrayList<Player> players = new ArrayList<>();
     public ArrayList<Wall> walls = new ArrayList<>();
     public int wallLimit;

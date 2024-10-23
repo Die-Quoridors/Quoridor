@@ -1,7 +1,6 @@
 package me.diequoridors.world;
 
 import me.diequoridors.Game;
-import me.diequoridors.ui.Renderer;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -50,6 +49,10 @@ public class Player {
     }
 
     public boolean isValidMove(int x, int y) {
+        // check Borders
+        if (x < 0 || y < 0 || x >= World.worldSize || y >= World.worldSize) {
+            return false;
+        }
 
         // check Walls
         for (Wall wall : game.world.walls) {
@@ -200,7 +203,7 @@ public class Player {
             return;
         }
 
-        if (x < 0 || y < 0 || x >= Renderer.gridSize || y >= Renderer.gridSize) {
+        if (x < 0 || y < 0 || x >= World.worldSize || y >= World.worldSize) {
             return;
         }
         if (!isValidMove(x, y)) {

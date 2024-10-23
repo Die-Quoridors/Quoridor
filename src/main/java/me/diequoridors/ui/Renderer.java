@@ -12,7 +12,6 @@ import java.util.TimerTask;
 
 public class Renderer {
 
-    public static final int gridSize = 9;
     private static final float cellPadding = 0.1f;
     private static final int wallWidth = 10;
 
@@ -60,7 +59,7 @@ public class Renderer {
 
     private int getCellSize() {
         int windowSize = Math.min(frame.getWidth(), frame.getHeight() - frame.getInsets().top);
-        return windowSize / (gridSize + 2);
+        return windowSize / (World.worldSize + 2);
     }
 
     public int coordinatesToScreen(int coord) {
@@ -72,7 +71,7 @@ public class Renderer {
         int cellSize = getCellSize();
         int offset = wall ? cellSize / 2 : 0;
         int coord = (screen - cellSize - offset) / cellSize;
-        return Math.min(gridSize, Math.max(-1, coord));
+        return Math.min(World.worldSize, Math.max(-1, coord));
     }
 
     public Player screenToWallPlayer(int screenX, int screenY) {
@@ -115,8 +114,8 @@ public class Renderer {
 
         // === render Grid ===
         graphics.setColor(Color.decode("#915a2e"));
-        for (int i = 0; i < gridSize; i++) {
-            for (int y = 0; y < gridSize; y++) {
+        for (int i = 0; i < World.worldSize; i++) {
+            for (int y = 0; y < World.worldSize; y++) {
                 graphics.fillRect(cellSize + i * cellSize + 5, cellSize + y * cellSize + 5, cellSize - 10, cellSize - 10);
             }
         }
@@ -190,7 +189,7 @@ public class Renderer {
             long placableWallsCount = world.wallLimit - placedWallCount;
             int[] wallDepotStart = Player.playerWallDepotArea[i];
             WallRotation playerRotation = Player.playerTargetDirection[i];
-            int wallSpacing = placableWallsCount <= (gridSize + 1) ? cellSize : cellSize / (int) (Math.ceil(((double) (placableWallsCount - 1) / gridSize)));
+            int wallSpacing = placableWallsCount <= (World.worldSize + 1) ? cellSize : cellSize / (int) (Math.ceil(((double) (placableWallsCount - 1) / World.worldSize)));
 
             for (int w = 0; w < placableWallsCount; w++) {
 
