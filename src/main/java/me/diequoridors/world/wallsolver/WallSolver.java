@@ -27,14 +27,14 @@ public class WallSolver {
         ArrayList<Vec2D> underConsideration = new ArrayList<>();
 
         for (boolean fst = true; !underConsideration.isEmpty() || fst; fst = false) {
-            if (dummyPlayer.isInWinArea()) {
-                return true;
-            }
-
             if (!fst) {
                 Vec2D nextPos = underConsideration.removeFirst();
                 dummyPlayer.x = nextPos.x;
                 dummyPlayer.y = nextPos.y;
+            }
+
+            if (dummyPlayer.isInWinArea()) {
+                return true;
             }
 
             // normal and diagonal
@@ -50,6 +50,15 @@ public class WallSolver {
                     }
                     if (dummyPlayer.isValidMove(ax, ay)) {
                         underConsideration.add(new Vec2D(ax, ay));
+                    } else {
+                        final Vec2D posBk = new Vec2D(dummyPlayer.x, dummyPlayer.y);
+                        dummyPlayer.x = ax;
+                        dummyPlayer.y = ay;
+                        if (dummyPlayer.isInWinArea()) {
+                            underConsideration.add(new Vec2D(ax, ay));
+                        }
+                        dummyPlayer.x = posBk.x;
+                        dummyPlayer.y = posBk.y;
                     }
                 }
             }
@@ -63,15 +72,15 @@ public class WallSolver {
             }).map(pl -> {
                 int diffx = pl.x - finalCurrentPos.x;
                 int diffy = pl.y - finalCurrentPos.y;
-                if (player.isValidMove(finalCurrentPos.x + diffx * 2, finalCurrentPos.y + diffy * 2)) {
+                if (dummyPlayer.isValidMove(finalCurrentPos.x + diffx * 2, finalCurrentPos.y + diffy * 2)) {
                     return new Vec2D(finalCurrentPos.x + diffx * 2, finalCurrentPos.y + diffy * 2);
                 }
                 int tryx = diffx == 0 ? 1 : 0;
                 int tryy = diffy == 0 ? 1 : 0;
-                if (player.isValidMove(finalCurrentPos.x + diffx * 2 + tryx, finalCurrentPos.y + diffy * 2 + tryy)) {
+                if (dummyPlayer.isValidMove(finalCurrentPos.x + diffx * 2 + tryx, finalCurrentPos.y + diffy * 2 + tryy)) {
                     return new Vec2D(finalCurrentPos.x + diffx * 2 + tryx, finalCurrentPos.y + diffy * 2 + tryy);
                 }
-                if (player.isValidMove(finalCurrentPos.x + diffx * 2 + tryx * -1, finalCurrentPos.y + diffy * 2 + tryy * -1)) {
+                if (dummyPlayer.isValidMove(finalCurrentPos.x + diffx * 2 + tryx * -1, finalCurrentPos.y + diffy * 2 + tryy * -1)) {
                     return new Vec2D(finalCurrentPos.x + diffx * 2 + tryx * -1, finalCurrentPos.y + diffy * 2 + tryy * -1);
                 }
                 return null;
