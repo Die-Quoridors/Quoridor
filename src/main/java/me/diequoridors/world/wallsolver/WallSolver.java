@@ -97,9 +97,4 @@ class Vec2D {
         this.y = y;
     }
 
-    public Vec2D(Vec2D vec) {
-        this.x = vec.x;
-        this.y = vec.y;
-    }
-
 }
