@@ -15,7 +15,7 @@ public class Wall {
     }
 
     public static boolean placementValid(World world, int x, int y, WallRotation rotation) {
-        return world.walls.stream().noneMatch(wall -> {
+        boolean simpleMatch = world.walls.stream().noneMatch(wall -> {
             if (wall.rotation == rotation) {
                 int startX = wall.rotation == WallRotation.Horizontal ? wall.x - 1 : wall.x;
                 int endX = wall.rotation == WallRotation.Horizontal ? wall.x + 1 : wall.x;
@@ -27,6 +27,11 @@ public class Wall {
                 return wall.x == x && wall.y == y;
             }
         });
+        if (!simpleMatch) {
+            return false;
+        }
+        world.wallSolver.solveWalls();
+        return true;
     }
     
 

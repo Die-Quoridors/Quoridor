@@ -1,6 +1,7 @@
 package me.diequoridors.world;
 
 import me.diequoridors.Game;
+import me.diequoridors.world.wallsolver.WallSolver;
 
 import java.util.ArrayList;
 
@@ -11,6 +12,7 @@ public class World {
     public int wallLimit;
     private final Game game;
     public Player ownPlayer;
+    public final WallSolver wallSolver = new WallSolver(this);
 
     public World(int wallLimit, Game game) {
         this.wallLimit = wallLimit;
