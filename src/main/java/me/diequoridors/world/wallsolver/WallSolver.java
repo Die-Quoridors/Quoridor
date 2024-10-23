@@ -30,6 +30,14 @@ public class WallSolver {
             if (dummyPlayer.isInWinArea()) {
                 return true;
             }
+
+            if (!fst) {
+                Vec2D nextPos = underConsideration.removeFirst();
+                dummyPlayer.x = nextPos.x;
+                dummyPlayer.y = nextPos.y;
+            }
+
+            // normal and diagonal
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
                     int ax = dummyPlayer.x + x;
@@ -46,6 +54,7 @@ public class WallSolver {
                 }
             }
 
+            // player skipping
             final Vec2D finalCurrentPos = new Vec2D(dummyPlayer.x, dummyPlayer.y);
             List<Vec2D> nearPlayerJumps = world.players.stream().filter(pl -> {
                 int diffx = Math.abs(finalCurrentPos.x - pl.x);
@@ -72,10 +81,6 @@ public class WallSolver {
             ).toList();
             underConsideration.addAll(nearPlayerJumps);
             visited.add(finalCurrentPos);
-
-            Vec2D nextPos = underConsideration.removeFirst();
-            dummyPlayer.x = nextPos.x;
-            dummyPlayer.y = nextPos.y;
         }
         return false;
     }
