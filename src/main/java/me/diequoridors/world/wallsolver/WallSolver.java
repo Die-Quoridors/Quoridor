@@ -1,107 +1,79 @@
 package me.diequoridors.world.wallsolver;
 
-import me.diequoridors.world.WallRotation;
+import me.diequoridors.Game;
+import me.diequoridors.world.Player;
 import me.diequoridors.world.World;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class WallSolver {
 
     private final World world;
+    private final Game game;
 
-    public WallSolver(World world) {
+    public WallSolver(World world, Game game) {
         this.world = world;
+        this.game = game;
     }
 
-    public void solveWalls() {
-        List<Vec2D[]> wallIndex = generateWallIndex();
-        List<Integer> stringEnds = findEnds(wallIndex);
+    public boolean solveWalls(Player player) {
+        ArrayList<Vec2D> visited = new ArrayList<>();
+        ArrayList<Vec2D> underConsideration = new ArrayList<>();
+        Vec2D currentPos = new Vec2D(player.x, player.y);
 
-        ArrayList<ArrayList<Integer>> strings = new ArrayList<>();
-        for (int wallI : stringEnds) {
-            if (strings.stream().anyMatch(s -> s.getFirst() == wallI || s.getLast() == wallI)) {
-                continue;
+        for (boolean fst = true; !underConsideration.isEmpty() || fst; fst = false) {
+            Player tmpPlayer = new Player(currentPos.x, currentPos.y, player.playerId, game);
+            if (tmpPlayer.isInWinArea()) {
+                return true;
+            }
+            for (int x = -1; x <= 1; x++) {
+                for (int y = -1; y <= 1; y++) {
+                    int ax = currentPos.x + x;
+                    int ay = currentPos.y + y;
+                    if (
+                            underConsideration.stream().anyMatch(p -> p.x == ax && p.y == ay)
+                            || visited.stream().anyMatch(p -> p.x == ax && p.y == ay)
+                    ) {
+                        continue;
+                    }
+                    if (tmpPlayer.isValidMove(ax, ay)) {
+                        underConsideration.add(new Vec2D(ax, ay));
+                    }
+                }
             }
 
-            List<ArrayList<Integer>> tmpStrings = growStrings(wallI, wallIndex);
-            strings.addAll(tmpStrings);
+            final Vec2D finalCurrentPos = currentPos;
+            List<Vec2D> nearPlayerJumps = world.players.stream().filter(pl -> {
+                int diffx = Math.abs(finalCurrentPos.x - pl.x);
+                int diffy = Math.abs(finalCurrentPos.y - pl.y);
+                return (diffx == 1 && diffy == 0) || (diffy == 1 && diffx == 0);
+            }).map(pl -> {
+                int diffx = pl.x - finalCurrentPos.x;
+                int diffy = pl.y - finalCurrentPos.y;
+                if (player.isValidMove(finalCurrentPos.x + diffx * 2, finalCurrentPos.y + diffy * 2)) {
+                    return new Vec2D(finalCurrentPos.x + diffx * 2, finalCurrentPos.y + diffy * 2);
+                }
+                int tryx = diffx == 0 ? 1 : 0;
+                int tryy = diffy == 0 ? 1 : 0;
+                if (player.isValidMove(finalCurrentPos.x + diffx * 2 + tryx, finalCurrentPos.y + diffy * 2 + tryy)) {
+                    return new Vec2D(finalCurrentPos.x + diffx * 2 + tryx, finalCurrentPos.y + diffy * 2 + tryy);
+                }
+                if (player.isValidMove(finalCurrentPos.x + diffx * 2 + tryx * -1, finalCurrentPos.y + diffy * 2 + tryy * -1)) {
+                    return new Vec2D(finalCurrentPos.x + diffx * 2 + tryx * -1, finalCurrentPos.y + diffy * 2 + tryy * -1);
+                }
+                return null;
+            }).filter(Objects::nonNull).filter(p ->
+                    underConsideration.stream().noneMatch(c -> c.x == p.x && c.y == p.y)
+                    && visited.stream().noneMatch(c -> c.x == p.x && c.y == p.y)
+            ).toList();
+            underConsideration.addAll(nearPlayerJumps);
+            visited.add(currentPos);
+
+            currentPos = underConsideration.removeFirst();
         }
-        System.out.println(strings);
-    }
-
-    private List<Vec2D[]> generateWallIndex() {
-        return world.walls.stream().map(wall -> {
-            int endAX = wall.rotation == WallRotation.Vertical ? wall.x : wall.x - 1;
-            int endAY = wall.rotation == WallRotation.Vertical ? wall.y - 1 : wall.y;
-
-            int endBX = wall.rotation == WallRotation.Vertical ? wall.x : wall.x + 1;
-            int endBY = wall.rotation == WallRotation.Vertical ? wall.y + 1 : wall.y;
-
-            return new Vec2D[]{
-                    new Vec2D(endAX, endAY),
-                    new Vec2D(endBX, endBY)
-            };
-        }).toList();
-    }
-
-    private List<Integer> findEnds(List<Vec2D[]> wallIndex) {
-        return wallIndex.stream()
-                .filter(wall ->
-                        !Arrays.stream(wall).allMatch(end -> endBlocked(end, wall, wallIndex))
-                )
-                .map(wallIndex::indexOf)
-                .toList();
-    }
-
-    // another wall shares end
-    private static boolean endBlocked(Vec2D end, Vec2D[] wall, List<Vec2D[]> wallIndex) {
-        return wallIndex.stream()
-                .filter(w -> w != wall)
-                .anyMatch(w ->
-                        Arrays.stream(w).anyMatch(e -> e.x == end.x && e.y == end.y)
-                );
-    }
-
-    private List<ArrayList<Integer>> growStrings(int wallI, List<Vec2D[]> wallIndex) {
-        return growStrings(wallI, wallIndex, -1);
-    }
-
-    private List<ArrayList<Integer>> growStrings(int wallI, List<Vec2D[]> wallIndex, int fromEnd) {
-        Vec2D[] wall = wallIndex.get(wallI);
-        Vec2D end;
-        if (fromEnd != -1) {
-            Vec2D e = wall[fromEnd == 0 ? 1 : 0];
-            if (!endBlocked(e, wall, wallIndex)) {
-                return List.of(new ArrayList<>(List.of(wallI)));
-            }
-            end = e;
-        } else {
-            Optional<Vec2D> en = Arrays.stream(wall).filter(e -> endBlocked(e, wall, wallIndex)).findFirst();
-            if (en.isEmpty()) {
-                return List.of(new ArrayList<>(List.of(wallI)));
-            }
-            end = en.get();
-        }
-
-        List<Vec2D[]> tmp = wallIndex.stream()
-                .filter(w -> w != wall)
-                .filter(w -> Arrays.stream(w).anyMatch(e -> e.x == end.x && e.y == end.y))
-                .toList();
-
-        return wallIndex.stream()
-                .filter(w -> w != wall)
-                .filter(w -> Arrays.stream(w).anyMatch(e -> e.x == end.x && e.y == end.y))
-                .map(w -> {
-                    int i = wallIndex.indexOf(w);
-
-                    // get end connected to prev wall
-                    Vec2D ef = Arrays.stream(w).filter(e -> e.x == end.x && e.y == end.y).findFirst().get();
-                    int ei = Arrays.stream(w).toList().indexOf(ef);
-
-                    return growStrings(i, wallIndex, ei).stream().peek(str -> str.add(wallI)).toList();
-                })
-                .flatMap(Collection::stream)
-                .toList();
+        return false;
     }
 
 }
@@ -114,6 +86,11 @@ class Vec2D {
     public Vec2D(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Vec2D(Vec2D vec) {
+        this.x = vec.x;
+        this.y = vec.y;
     }
 
 }

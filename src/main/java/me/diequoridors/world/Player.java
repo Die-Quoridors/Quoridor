@@ -44,7 +44,12 @@ public class Player {
         return playerColorMap[playerId];
     }
 
-    private boolean isValidMove(int x, int y) {
+    public boolean isInWinArea() {
+        int[] winArea = playerWinArea[playerId];
+        return x >= winArea[0] && y >= winArea[1] && x < winArea[0] + winArea[2] && y < winArea[1] + winArea[3];
+    }
+
+    public boolean isValidMove(int x, int y) {
 
         // check Walls
         for (Wall wall : game.world.walls) {

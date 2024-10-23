@@ -55,8 +55,7 @@ public class Game {
     public Player getWinner() {
         for (int i = 0; i < world.players.size(); i++) {
             Player player = world.players.get(i);
-            int[] winArea = Player.playerWinArea[i];
-            if (player.x >= winArea[0] && player.y >= winArea[1] && player.x < winArea[0] + winArea[2] && player.y < winArea[1] + winArea[3]) {
+            if (player.isInWinArea()) {
                 return player;
             }
         }

@@ -30,7 +30,7 @@ public class Wall {
         if (!simpleMatch) {
             return false;
         }
-        world.wallSolver.solveWalls();
+        System.out.println("Vaild: " + world.wallSolver.solveWalls(world.players.get(0)));
         return true;
     }
     
