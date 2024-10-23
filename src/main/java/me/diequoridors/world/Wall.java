@@ -30,7 +30,7 @@ public class Wall {
         if (!simpleMatch) {
             return false;
         }
-        return world.wallSolver.isWallValid(world.players.get(0),x, y, rotation);
+        return world.players.stream().allMatch(player -> world.wallSolver.isWallValid(player ,x, y, rotation));
     }
     
 
