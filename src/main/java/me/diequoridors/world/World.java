@@ -19,7 +19,7 @@ public class World {
     public World(int wallLimit, Game game) {
         this.wallLimit = wallLimit;
         this.game = game;
-        wallSolver = new WallSolver(this, game);
+        wallSolver = new WallSolver(this);
     }
 
     public void populatePlayers(int playerCount) throws Error {

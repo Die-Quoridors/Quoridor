@@ -2,6 +2,8 @@ package me.diequoridors.world.wallsolver;
 
 import me.diequoridors.Game;
 import me.diequoridors.world.Player;
+import me.diequoridors.world.Wall;
+import me.diequoridors.world.WallRotation;
 import me.diequoridors.world.World;
 
 import java.util.ArrayList;
@@ -11,40 +13,40 @@ import java.util.Objects;
 public class WallSolver {
 
     private final World world;
-    private final Game game;
 
-    public WallSolver(World world, Game game) {
+    public WallSolver(World world) {
         this.world = world;
-        this.game = game;
     }
 
-    public boolean solveWalls(Player player) {
+    public boolean isWallValid(Player player, int wx, int wy, WallRotation wrotation) {
+        Game fakeGame = new Game(world);
+        Player dummyPlayer = new Player(player.x, player.y , player.playerId, fakeGame);
+        fakeGame.world.walls.add(new Wall(wx, wy, wrotation, dummyPlayer));
+
         ArrayList<Vec2D> visited = new ArrayList<>();
         ArrayList<Vec2D> underConsideration = new ArrayList<>();
-        Vec2D currentPos = new Vec2D(player.x, player.y);
 
         for (boolean fst = true; !underConsideration.isEmpty() || fst; fst = false) {
-            Player tmpPlayer = new Player(currentPos.x, currentPos.y, player.playerId, game);
-            if (tmpPlayer.isInWinArea()) {
+            if (dummyPlayer.isInWinArea()) {
                 return true;
             }
             for (int x = -1; x <= 1; x++) {
                 for (int y = -1; y <= 1; y++) {
-                    int ax = currentPos.x + x;
-                    int ay = currentPos.y + y;
+                    int ax = dummyPlayer.x + x;
+                    int ay = dummyPlayer.y + y;
                     if (
                             underConsideration.stream().anyMatch(p -> p.x == ax && p.y == ay)
                             || visited.stream().anyMatch(p -> p.x == ax && p.y == ay)
                     ) {
                         continue;
                     }
-                    if (tmpPlayer.isValidMove(ax, ay)) {
+                    if (dummyPlayer.isValidMove(ax, ay)) {
                         underConsideration.add(new Vec2D(ax, ay));
                     }
                 }
             }
 
-            final Vec2D finalCurrentPos = currentPos;
+            final Vec2D finalCurrentPos = new Vec2D(dummyPlayer.x, dummyPlayer.y);
             List<Vec2D> nearPlayerJumps = world.players.stream().filter(pl -> {
                 int diffx = Math.abs(finalCurrentPos.x - pl.x);
                 int diffy = Math.abs(finalCurrentPos.y - pl.y);
@@ -69,9 +71,11 @@ public class WallSolver {
                     && visited.stream().noneMatch(c -> c.x == p.x && c.y == p.y)
             ).toList();
             underConsideration.addAll(nearPlayerJumps);
-            visited.add(currentPos);
+            visited.add(finalCurrentPos);
 
-            currentPos = underConsideration.removeFirst();
+            Vec2D nextPos = underConsideration.removeFirst();
+            dummyPlayer.x = nextPos.x;
+            dummyPlayer.y = nextPos.y;
         }
         return false;
     }

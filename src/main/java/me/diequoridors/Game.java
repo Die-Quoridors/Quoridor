@@ -40,6 +40,18 @@ public class Game {
         networkAdapter = new GameNetworkAdapter(serverUrl, this, gameId);
     }
 
+    // dummy Game
+    public Game(World worldToClone) {
+        world = new World(worldToClone.wallLimit, this);
+        renderer = null;
+        windowInteractions = null;
+        mouseListener = null;
+        keyListener = null;
+
+        world.walls.addAll(worldToClone.walls);
+        world.players.addAll(worldToClone.players);
+    }
+
     public void exit() {
         keyListener.removeListener();
         mouseListener.removeListener();
