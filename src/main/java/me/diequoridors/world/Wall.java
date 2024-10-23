@@ -30,8 +30,7 @@ public class Wall {
         if (!simpleMatch) {
             return false;
         }
-        System.out.println("Vaild: " + world.wallSolver.isWallValid(world.players.get(0),x, y, rotation));
-        return true;
+        return world.wallSolver.isWallValid(world.players.get(0),x, y, rotation);
     }
     
 
